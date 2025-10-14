@@ -1,6 +1,5 @@
 import Foundation
 
-// 1. Añadimos nuevas propiedades al struct para guardar más datos
 struct Equipo: Identifiable, Hashable, Codable {
     let id = UUID()
     let nombre: String
@@ -10,8 +9,6 @@ struct Equipo: Identifiable, Hashable, Codable {
     let ultimoResultado: String
 }
 
-
-// 2. Llenamos la lista con la información específica para cada país
 let todosLosEquipos: [Equipo] = [
     Equipo(nombre: "Canadá", nombreBandera: "canada",
            descripcion: "Será la primera vez que participen en dos torneos consecutivos.",
@@ -53,5 +50,13 @@ let todosLosEquipos: [Equipo] = [
            descripcion: "Terminaron 15 años de espera y los Guaraníes estarán de regreso.",
            proximoPartido: "vs Uruguay",
            ultimoResultado: "Empate 1-1"),
-    // ... y así sucesivamente con el resto de los países
 ]
+
+// Función pura y testeable que filtra equipos
+func filtrarEquipos(equipos: [Equipo], conTexto texto: String) -> [Equipo] {
+    if texto.isEmpty {
+        return equipos
+    } else {
+        return equipos.filter { $0.nombre.localizedCaseInsensitiveContains(texto) }
+    }
+}

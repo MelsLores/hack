@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct SeleccionEquiposView: View {
-    // La acción ahora envía un array de equipos
     var alCompletar: ([Equipo]) -> Void
 
     @State private var equiposSeleccionados: Set<Equipo> = []
@@ -10,32 +9,28 @@ struct SeleccionEquiposView: View {
     let columns: [GridItem] = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
 
     var equiposFiltrados: [Equipo] {
-        if textoBusqueda.isEmpty {
-            return todosLosEquipos // Usa la lista global
-        } else {
-            return todosLosEquipos.filter { $0.nombre.localizedCaseInsensitiveContains(textoBusqueda) }
-        }
+        // Llama a la función global y testeable
+        return filtrarEquipos(equipos: todosLosEquipos, conTexto: textoBusqueda)
     }
 
     var body: some View {
         ZStack {
-            Color(red: 25/255, green: 38/255, blue: 62/255).ignoresSafeArea()
+            Constants.Colores.fondoPrincipal.ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 16) {
-                // Botón de Saltar
                 HStack {
                     Spacer()
                     Button("Saltar") {
-                        alCompletar([]) // Llama a la acción de completar con una lista vacía
+                        alCompletar([])
                     }
                     .foregroundColor(.white)
                 }
 
-                Text("Elige los equipos que quieres seguir")
+                Text(Constants.Titulos.seleccionEquipos)
                     .font(.largeTitle).fontWeight(.bold)
                     .foregroundColor(.white)
                 
-                Text("Consigue un acceso más rápido a las noticias, a los próximos partidos y mucho más.")
+                Text(Constants.Textos.seleccionEquiposSubtitulo)
                     .foregroundColor(.gray)
 
                 HStack {
@@ -70,7 +65,7 @@ struct SeleccionEquiposView: View {
                 Spacer()
                 
                 Button(action: {
-                    alCompletar(Array(equiposSeleccionados)) // La acción del botón ahora envía los datos
+                    alCompletar(Array(equiposSeleccionados))
                 }) {
                     Text("Continuar")
                         .font(.headline).frame(maxWidth: .infinity).padding()
@@ -85,23 +80,18 @@ struct SeleccionEquiposView: View {
     }
 }
 
-// Vista para un solo equipo en la cuadrícula
 struct EquipoItemView: View {
     let equipo: Equipo
     var isSelected: Bool
 
     var body: some View {
         VStack {
-            // --- LÍNEA MODIFICADA ---
-            // Antes: Image(systemName: equipo.logoName)
-            // Ahora busca la imagen en tus Assets
             Image(equipo.nombreBandera)
-                .resizable() // Hace que la imagen se pueda redimensionar
-                .aspectRatio(contentMode: .fit) // Mantiene la proporción
-                .clipShape(Circle()) // Opcional: la hace redonda
-                .frame(width: 50, height: 40) // Ajusta el tamaño
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .clipShape(Circle())
+                .frame(width: 50, height: 40)
                 .padding(.bottom, 5)
-            // --- FIN DE LA MODIFICACIÓN ---
 
             Text(equipo.nombre)
                 .font(.caption)
@@ -110,7 +100,7 @@ struct EquipoItemView: View {
                 .foregroundColor(.white)
         }
         .padding(8).frame(width: 100, height: 100)
-        .background(Color(red: 43/255, green: 56/255, blue: 82/255)).cornerRadius(12)
+        .background(Constants.Colores.fondoItem).cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
                 .stroke(isSelected ? .blue : Color.clear, lineWidth: 3)
