@@ -1,20 +1,57 @@
 import Foundation
 
+// 1. Añadimos nuevas propiedades al struct para guardar más datos
 struct Equipo: Identifiable, Hashable, Codable {
     let id = UUID()
     let nombre: String
-    let logoName: String
+    let nombreBandera: String
+    let descripcion: String
+    let proximoPartido: String
+    let ultimoResultado: String
 }
 
 
+// 2. Llenamos la lista con la información específica para cada país
 let todosLosEquipos: [Equipo] = [
-    Equipo(nombre: "Arsenal", logoName: "sportscourt.fill"),
-    Equipo(nombre: "Atleti", logoName: "flag.fill"),
-    Equipo(nombre: "Bayern München", logoName: "shield.fill"),
-    Equipo(nombre: "Benfica", logoName: "star.fill"),
-    Equipo(nombre: "Chelsea", logoName: "crown.fill"),
-    Equipo(nombre: "Juventus", logoName: "bolt.fill"),
-    Equipo(nombre: "Man Utd", logoName: "flame.fill"),
-    Equipo(nombre: "Paris SG", logoName: "paperplane.fill"),
-    Equipo(nombre: "Real Madrid", logoName: "moon.fill"),
+    Equipo(nombre: "Canadá", nombreBandera: "canada",
+           descripcion: "Será la primera vez que participen en dos torneos consecutivos.",
+           proximoPartido: "vs México",
+           ultimoResultado: "Empate 1-1"),
+    Equipo(nombre: "México", nombreBandera: "mexico",
+           descripcion: "El Tri ha albergado el evento más veces que cualquier otro país.",
+           proximoPartido: "vs Estados Unidos",
+           ultimoResultado: "Victoria 2-0"),
+    Equipo(nombre: "Estados Unidos", nombreBandera: "estadosunidos",
+           descripcion: "Su recorrido hasta semifinales en 1930 es su mejor actuación hasta la fecha.",
+           proximoPartido: "vs Canadá",
+           ultimoResultado: "Derrota 0-1"),
+    Equipo(nombre: "Japón", nombreBandera: "japon",
+           descripcion: "Los Samuráis Azules disputarán su octavo Mundial consecutivo.",
+           proximoPartido: "vs República de Corea",
+           ultimoResultado: "Victoria 3-0"),
+    Equipo(nombre: "Argentina", nombreBandera: "argentina",
+           descripcion: "La Albiceleste dominó la competencia y logró su pasaje cuatro jornadas antes del final.",
+           proximoPartido: "vs Brasil",
+           ultimoResultado: "Empate 0-0"),
+    Equipo(nombre: "Brasil", nombreBandera: "brasil",
+           descripcion: "El único equipo que nunca ha faltado a una Copa del Mundo.",
+           proximoPartido: "vs Argentina",
+           ultimoResultado: "Victoria 1-0"),
+    Equipo(nombre: "Uruguay", nombreBandera: "uruguay",
+           descripcion: "Aseguraron su quinta participación consecutiva en el torneo global.",
+           proximoPartido: "vs Colombia",
+           ultimoResultado: "Victoria 2-1"),
+    Equipo(nombre: "Colombia", nombreBandera: "colombia",
+           descripcion: "Garantizaron el boleto a la competencia tras perderse Catar 2022.",
+           proximoPartido: "vs Ecuador",
+           ultimoResultado: "Empate 2-2"),
+    Equipo(nombre: "Ecuador", nombreBandera: "ecuador",
+           descripcion: "Es la quinta ocasión que la Tri logra el pase a la fase final.",
+           proximoPartido: "vs Paraguay",
+           ultimoResultado: "Derrota 1-2"),
+    Equipo(nombre: "Paraguay", nombreBandera: "paraguay",
+           descripcion: "Terminaron 15 años de espera y los Guaraníes estarán de regreso.",
+           proximoPartido: "vs Uruguay",
+           ultimoResultado: "Empate 1-1"),
+    // ... y así sucesivamente con el resto de los países
 ]

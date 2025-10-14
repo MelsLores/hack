@@ -92,11 +92,28 @@ struct EquipoItemView: View {
 
     var body: some View {
         VStack {
-            Image(systemName: equipo.logoName).font(.system(size: 40)).foregroundColor(isSelected ? .blue : .white)
-            Text(equipo.nombre).font(.caption).multilineTextAlignment(.center).frame(height: 40).foregroundColor(.white)
+            // --- LÍNEA MODIFICADA ---
+            // Antes: Image(systemName: equipo.logoName)
+            // Ahora busca la imagen en tus Assets
+            Image(equipo.nombreBandera)
+                .resizable() // Hace que la imagen se pueda redimensionar
+                .aspectRatio(contentMode: .fit) // Mantiene la proporción
+                .clipShape(Circle()) // Opcional: la hace redonda
+                .frame(width: 50, height: 40) // Ajusta el tamaño
+                .padding(.bottom, 5)
+            // --- FIN DE LA MODIFICACIÓN ---
+
+            Text(equipo.nombre)
+                .font(.caption)
+                .multilineTextAlignment(.center)
+                .frame(height: 40)
+                .foregroundColor(.white)
         }
         .padding(8).frame(width: 100, height: 100)
         .background(Color(red: 43/255, green: 56/255, blue: 82/255)).cornerRadius(12)
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(isSelected ? .blue : Color.clear, lineWidth: 3))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(isSelected ? .blue : Color.clear, lineWidth: 3)
+        )
     }
 }
