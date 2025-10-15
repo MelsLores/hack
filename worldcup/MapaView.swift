@@ -2,21 +2,25 @@ import SwiftUI
 import MapKit
 
 struct MapaView: View {
-    // --- DATOS DE EJEMPLO ---
-    let lugares: [LugarTuristico] = [
-        .init(nombre: "FIFA Fan Zone", tipo: "Fan Zone", coordenada: .init(latitude: 34.0522, longitude: -118.2437), presupuesto: .bajo),
-        .init(nombre: "Reunión de Aficionados", tipo: "Evento", coordenada: .init(latitude: 34.055, longitude: -118.25), presupuesto: .medio),
-        .init(nombre: "Restaurante Temático", tipo: "Restaurante", coordenada: .init(latitude: 34.049, longitude: -118.24), presupuesto: .alto)
-    ]
+    // --- LUGAR DESTACADO ---
+    // Definimos la ubicación del estadio para usarla fácilmente.
+    private let estadioLocation = CLLocationCoordinate2D(latitude: 25.669282467531197, longitude:  -100.2444465605275)
 
-    // --- ESTADO DE LA VISTA ---
-    @State private var region = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437),
-        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+    // --- ESTADO INICIAL DEL MAPA ---
+    // Usamos una posición inicial para centrar el mapa en el estadio al abrir.
+    @State private var initialPosition: MapCameraPosition = .camera(
+        MapCamera(
+            centerCoordinate: CLLocationCoordinate2D(latitude: 25.669282467531197, longitude:  -100.2444465605275),
+            distance: 800 // Distancia en metros para el zoom inicial
+        )
     )
-    
-    @State private var presupuestoSeleccionado: LugarTuristico.Presupuesto? = nil
 
+    // (El resto de tus datos de ejemplo y filtros se quedan igual)
+    let lugares: [LugarTuristico] = [
+        .init(nombre: "FIFA Fan Zone", tipo: "Fan Zone", coordenada: .init(latitude: 25.675, longitude: -100.25), presupuesto: .bajo),
+        .init(nombre: "Restaurante Temático", tipo: "Restaurante", coordenada: .init(latitude: 25.671, longitude: -100.24), presupuesto: .alto)
+    ]
+    @State private var presupuestoSeleccionado: LugarTuristico.Presupuesto? = nil
     var lugaresFiltrados: [LugarTuristico] {
         if let presupuesto = presupuestoSeleccionado {
             return lugares.filter { $0.presupuesto == presupuesto }
@@ -26,27 +30,30 @@ struct MapaView: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            // --- MAPA COMPATIBLE ---
-            // Usamos la sintaxis anterior que funciona en iOS 15/16
-            Map(coordinateRegion: $region, annotationItems: lugaresFiltrados) { lugar in
-                MapAnnotation(coordinate: lugar.coordenada) {
-                    VStack {
+            // --- MAPA ACTUALIZADO CON CÍRCULO Y MARCADOR ---
+            Map(position: $initialPosition) {
+                // 1. Marcador con el nombre del lugar
+                Marker("Estadio BBVA", coordinate: estadioLocation)
+
+                // 2. Círculo con un radio de 100 metros
+                MapCircle(center: estadioLocation, radius: 200)
+                    .stroke(Color.blue, lineWidth: 2) // Borde del círculo
+                    .foregroundStyle(Color.blue.opacity(0.3)) // Relleno del círculo
+
+                // Marcadores para los otros lugares turísticos (el filtro sigue funcionando)
+                ForEach(lugaresFiltrados) { lugar in
+                    Annotation(lugar.nombre, coordinate: lugar.coordenada) {
                         Image(systemName: "star.circle.fill")
                             .font(.title)
-                            .foregroundColor(.red)
-                        Text(lugar.nombre)
-                            .font(.caption)
-                            .foregroundColor(.primary)
-                            .padding(5)
-                            .background(.white.opacity(0.8))
-                            .cornerRadius(5)
+                            .foregroundStyle(.red)
+                            .background(.white)
+                            .clipShape(Circle())
                     }
                 }
             }
             .ignoresSafeArea()
-            // --- FIN DEL MAPA COMPATIBLE ---
 
-            // El Filtro de Presupuesto (sin cambios)
+            // Filtro de Presupuesto (sin cambios)
             VStack {
                 Picker("Presupuesto", selection: $presupuestoSeleccionado) {
                     Text("Todos").tag(nil as LugarTuristico.Presupuesto?)

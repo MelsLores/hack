@@ -9,13 +9,13 @@ struct SeleccionEquiposView: View {
     let columns: [GridItem] = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
 
     var equiposFiltrados: [Equipo] {
-        // Llama a la función global y testeable
         return filtrarEquipos(equipos: todosLosEquipos, conTexto: textoBusqueda)
     }
 
     var body: some View {
         ZStack {
-            Constants.Colores.fondoPrincipal.ignoresSafeArea()
+            // Usa el color de fondo del tema
+            Color.theme.mainBackground.ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
@@ -23,26 +23,31 @@ struct SeleccionEquiposView: View {
                     Button("Saltar") {
                         alCompletar([])
                     }
-                    .foregroundColor(.white)
+                    // Usa el color de texto primario del tema
+                    .foregroundColor(Color.theme.primaryText)
                 }
 
                 Text(Constants.Titulos.seleccionEquipos)
                     .font(.largeTitle).fontWeight(.bold)
-                    .foregroundColor(.white)
-                
+                    .foregroundColor(Color.theme.primaryText)
+            
                 Text(Constants.Textos.seleccionEquiposSubtitulo)
-                    .foregroundColor(.gray)
+                    // Usa el color de texto secundario del tema
+                    .foregroundColor(Color.theme.secondaryText)
 
                 HStack {
-                    Image(systemName: "magnifyingglass").foregroundColor(.gray)
-                    TextField("", text: $textoBusqueda, prompt: Text("Buscar equipos").foregroundColor(.gray))
-                        .foregroundColor(.white)
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(Color.theme.secondaryText)
+                    
+                    TextField("", text: $textoBusqueda, prompt: Text("Buscar equipos").foregroundColor(Color.theme.secondaryText))
+                        .foregroundColor(Color.theme.primaryText)
                 }
                 .padding(.bottom, 8)
-                .overlay(Rectangle().frame(height: 1).foregroundColor(.gray), alignment: .bottom)
+                .overlay(Rectangle().frame(height: 1).foregroundColor(Color.theme.secondaryText), alignment: .bottom)
 
                 Text("Equipos en la competición")
-                    .font(.headline).fontWeight(.bold).foregroundColor(.white).padding(.top)
+                    .font(.headline).fontWeight(.bold)
+                    .foregroundColor(Color.theme.primaryText).padding(.top)
 
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 20) {
@@ -69,14 +74,15 @@ struct SeleccionEquiposView: View {
                 }) {
                     Text("Continuar")
                         .font(.headline).frame(maxWidth: .infinity).padding()
-                        .background(equiposSeleccionados.isEmpty ? Color.gray : Color.blue)
-                        .foregroundColor(.white).cornerRadius(12)
+                        .background(equiposSeleccionados.isEmpty ? Color.theme.secondaryText : Color.theme.primaryAccent)
+                        .foregroundColor(.white) // El texto del botón suele ser blanco
+                        .cornerRadius(12)
                 }
                 .disabled(equiposSeleccionados.isEmpty)
             }
             .padding()
         }
-        .preferredColorScheme(.dark)
+        // Se elimina .preferredColorScheme(.dark) para que la vista sea adaptable
     }
 }
 
@@ -97,13 +103,14 @@ struct EquipoItemView: View {
                 .font(.caption)
                 .multilineTextAlignment(.center)
                 .frame(height: 40)
-                .foregroundColor(.white)
+                .foregroundColor(Color.theme.primaryText)
         }
         .padding(8).frame(width: 100, height: 100)
-        .background(Constants.Colores.fondoItem).cornerRadius(12)
+        .background(Color.theme.cardBackground) // Usa el color de tarjeta del tema
+        .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(isSelected ? .blue : Color.clear, lineWidth: 3)
+                .stroke(isSelected ? Color.theme.primaryAccent : Color.clear, lineWidth: 3) // Usa el color de acento
         )
     }
 }

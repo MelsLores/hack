@@ -21,9 +21,9 @@ struct LugarTuristico: Identifiable {
     // An Enum defines a group of related values, making your code safer and clearer.
     // It's also CaseIterable so we can loop through all cases for the filter.
     enum Presupuesto: String, CaseIterable, Identifiable {
-        case bajo = "$"
-        case medio = "$$"
-        case alto = "$$$"
+        case bajo = " "
+        //case medio = " "
+        //case alto = " "
         
         // SwiftUI needs this to identify each enum case in the Picker.
         var id: String { self.rawValue }
